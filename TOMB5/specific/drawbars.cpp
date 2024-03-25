@@ -12,6 +12,7 @@
 #include "polyinsert.h"
 #include "winmain.h"
 #include "texture.h"
+#include "dxshell.h"
 
 static GouraudBarColourSet healthBarColourSet =
 {
@@ -461,6 +462,9 @@ void S_UpdateLoadBar()
 long S_DrawLoadBar()
 {
 	long x, y, w, h;
+
+	if (App.dx.Flags & DXF_FULLSCREEN)
+		BltBackBuffer();
 
 	_BeginScene();
 	InitBuckets();

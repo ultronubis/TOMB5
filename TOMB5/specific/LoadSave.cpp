@@ -785,6 +785,10 @@ void DoOptions()
 void CreateMonoScreen()
 {
 	MonoScreenOn = 1;
+
+	if (App.dx.Flags & DXF_FULLSCREEN)
+		BltBackBuffer();
+
 	ConvertSurfaceToTextures(App.dx.lpBackBuffer);
 }
 

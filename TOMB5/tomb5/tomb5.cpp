@@ -1,7 +1,6 @@
 #include "../tomb5/pch.h"
 #include "tomb5.h"
 #include "../specific/registry.h"
-#include "libs/discordRPC/discord_rpc.h"
 #include "../game/gameflow.h"
 #include "../game/lara.h"
 
@@ -112,6 +111,10 @@ void init_tomb5_stuff()
 		sprintf(buf, "uw_dust");
 		tomb5.uw_dust = 2;								//original
 		REG_WriteLong(buf, tomb5.uw_dust);
+
+		sprintf(buf, "mmode");
+		tomb5.mirrorMode = 0;							//off
+		REG_WriteBool(buf, tomb5.mirrorMode);
 	}
 	else	//Key already exists, settings already written, read them. also falls back to default if a smartass manually deletes a single value
 	{
@@ -186,6 +189,9 @@ void init_tomb5_stuff()
 
 		sprintf(buf, "uw_dust");
 		REG_ReadLong(buf, tomb5.uw_dust, 2);
+
+		sprintf(buf, "mmode");
+		REG_ReadBool(buf, tomb5.mirrorMode, 0);
 	}
 
 	CloseRegistry();
@@ -268,15 +274,10 @@ void save_new_tomb5_settings()
 	sprintf(buf, "uw_dust");
 	REG_WriteLong(buf, tomb5.uw_dust);
 
+	sprintf(buf, "mmode");
+	REG_WriteBool(buf, tomb5.mirrorMode);
+
 	CloseRegistry();
-}
-
-void RPC_Init()
-{
-	DiscordEventHandlers handlers;
-
-	memset(&handlers, 0, sizeof(handlers));
-	Discord_Initialize("959220032787869751", &handlers, 1, 0);
 }
 
 const char* RPC_GetLevelName()
@@ -375,28 +376,4 @@ const char* RPC_GetHealthPercentage()
 
 	sprintf(buf, "Health: %i%%", lara_item->hit_points / 10);
 	return buf;
-}
-
-void RPC_Update()
-{
-	DiscordRichPresence RPC;
-
-	memset(&RPC, 0, sizeof(RPC));
-
-	RPC.details = RPC_GetLevelName();
-	RPC.largeImageKey = RPC_GetLevelPic();
-	RPC.largeImageText = gfCurrentLevel == LVL5_COLOSSEUM ? "BOO" : RPC.details;	//xoxo
-
-	RPC.smallImageKey = RPC_GetHealthPic();
-	RPC.smallImageText = RPC_GetHealthPercentage();
-
-	RPC.state = RPC_GetTimer();
-
-	RPC.instance = 1;
-	Discord_UpdatePresence(&RPC);
-}
-
-void RPC_close()
-{
-	Discord_Shutdown();
 }

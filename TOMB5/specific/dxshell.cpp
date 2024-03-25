@@ -4,6 +4,8 @@
 #include "winmain.h"
 #include "input.h"
 
+extern tomb5_options tomb5;
+
 long DDSCL_FLAGS[11] =	// for DXSetCooperativeLevel logging
 {
 	DDSCL_ALLOWMODEX,
@@ -463,9 +465,26 @@ HRESULT DXShowFrame()
 		return 0;
 
 	if (G_dxptr->Flags & DXF_WINDOWED)
-		return DXAttempt(G_dxptr->lpPrimaryBuffer->Blt(&G_dxptr->rScreen, G_dxptr->lpBackBuffer, &G_dxptr->rViewport, DDBLT_WAIT, 0));
-	else
+		return DXAttempt(G_dxptr->lpPrimaryBuffer->Blt(&G_dxptr->rScreen, G_dxptr->lpBackBuffer, &G_dxptr->rViewport, DDBLT_DDFX | DDBLT_WAIT, &GetDDBLTFX()));
+	else {
+		BltBackBuffer();
 		return DXAttempt(G_dxptr->lpPrimaryBuffer->Flip(0, DDFLIP_WAIT));
+	}
+		
+}
+
+void BltBackBuffer() {
+	if (tomb5.mirrorMode) {
+		DXAttempt(G_dxptr->lpBackBuffer->Blt(NULL, G_dxptr->lpBackBuffer, NULL, DDBLT_DDFX | DDBLT_WAIT, &GetDDBLTFX()));
+	}
+}
+
+static _DDBLTFX& GetDDBLTFX() {
+	static _DDBLTFX ddbltfx;
+	ZeroMemory(&ddbltfx, sizeof(ddbltfx));
+	ddbltfx.dwSize = sizeof(ddbltfx);
+	ddbltfx.dwDDFX = tomb5.mirrorMode ? DDBLTFX_MIRRORLEFTRIGHT : 0;
+	return ddbltfx;
 }
 
 void DXMove(long x, long y)
