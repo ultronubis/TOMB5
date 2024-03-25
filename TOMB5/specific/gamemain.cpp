@@ -191,12 +191,10 @@ unsigned int __stdcall GameMain(void* ptr)
 		if (!App.SoundDisabled)
 			SOUND_Init();
 
-		RPC_Init();
 		init_tomb5_stuff();
 		DoGameflow();
 		GameClose();
 		S_CDStop();
-		RPC_close();
 
 		PostMessage(App.hWnd, WM_CLOSE, 0, 0);
 		MainThread.active = 0;

@@ -33,6 +33,8 @@ long DXUpdateJoystick();
 void DXInitInput(HWND hwnd, HINSTANCE hinstance);
 const char* DXGetErrorString(HRESULT hr);
 const char* DIGetErrorString(HRESULT hr);
+void BltBackBuffer();
+_DDBLTFX& GetDDBLTFX();
 
 extern DXPTR* G_dxptr;
 extern DXINFO* G_dxinfo;
