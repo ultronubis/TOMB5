@@ -69,6 +69,11 @@
 - Improve how the hair interacts with water.
 - New setup window.
 
+## [3.3.0](https://github.com/ultronubis/TOMB5/releases/tag/v3.3.0) (Mar. 25 2024)
+
+- Added mirror mode
+- Removed discord
+- Lara picks up items from a farther distance (within one "square") 
 
 ## [3.2.0](https://github.com/Trxyebeep/TOMB5/tree/V3.2.0) (Feb. 4 2023)
 
